@@ -40,7 +40,7 @@ public:
 //MEMOIZATION
 //TC: O(n*m)
 //SC: O(n-1)+O(m-1) + O(m*n) //stack space and dp array
-class Solution {
+/*class Solution {
 public:
     
     int f(int i, int j, vector<vector<int>> &dp){
@@ -60,5 +60,31 @@ public:
         vector<vector<int>> dp(m,vector<int> (n,-1));
         int ans = f(m-1, n-1, dp);
         return ans;    
+    }
+};*/
+
+//TABULATION BOTTOM UP
+class Solution {
+public:
+
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m,vector<int> (n,0));
+
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(i==0 && j==0){
+                    dp[i][j]=1;
+                    continue;
+                }
+                int l = 0;
+                int up = 0;
+                if(i>0)// to not go out of bounds
+                    l = dp[i-1][j];
+                if(j>0)
+                    up = dp[i][j-1];
+                dp[i][j] = l+up;
+            }
+        }
+        return dp[m-1][n-1];    
     }
 };
