@@ -61,34 +61,72 @@
 //TABULATION
 //TC: O(N*M)
 //SC: O(N)+O(N)
+// class Solution {
+// public:
+//     int minFallingPathSum(vector<vector<int>>& matrix) {
+//         int n = matrix.size();
+//         vector<vector<int>> dp(n,vector<int>(n,0));
+//         int ans = 1e9;
+
+//         for(int i=0; i<n; i++){
+//             for(int j=0; j<n; j++){
+//                     if(i == 0){
+//                         dp[i][j] = matrix[i][j];
+//                         continue;
+//                     }
+//                     int u = 1e9;
+//                     int ur = 1e9;
+//                     int ul = 1e9;
+//                     if(i>0 && j>0)
+//                         ul = matrix[i][j] + dp[i-1][j-1];
+//                     if(i>0 && j<n-1)
+//                         ur = matrix[i][j] + dp[i-1][j+1];
+//                     if(i>0)
+//                         u = matrix[i][j] + dp[i-1][j];                    
+//                     dp[i][j] = min(u,min(ur,ul));        
+//             }
+//         }
+//         int mini = 1e9;
+//         for(int i=0; i<n; i++){
+//             mini = min(mini,dp[n-1][i]);
+//         }
+//         return mini;  
+//     }
+// };
+
+//SPACE OPTIMIZATION
+//TC: O(N*M)
+//SC: O(N)
 class Solution {
 public:
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int n = matrix.size();
-        vector<vector<int>> dp(n,vector<int>(n,0));
+        vector<int> prev(n,0);
         int ans = 1e9;
 
         for(int i=0; i<n; i++){
+            vector<int> temp(n,0);
             for(int j=0; j<n; j++){
                     if(i == 0){
-                        dp[i][j] = matrix[i][j];
+                        temp[j] = matrix[i][j];
                         continue;
                     }
                     int u = 1e9;
                     int ur = 1e9;
                     int ul = 1e9;
                     if(i>0 && j>0)
-                        ul = matrix[i][j] + dp[i-1][j-1];
+                        ul = matrix[i][j] + prev[j-1];
                     if(i>0 && j<n-1)
-                        ur = matrix[i][j] + dp[i-1][j+1];
+                        ur = matrix[i][j] + prev[j+1];
                     if(i>0)
-                        u = matrix[i][j] + dp[i-1][j];                    
-                    dp[i][j] = min(u,min(ur,ul));        
+                        u = matrix[i][j] + prev[j];                    
+                    temp[j] = min(u,min(ur,ul));        
             }
+            prev = temp;
         }
         int mini = 1e9;
         for(int i=0; i<n; i++){
-            mini = min(mini,dp[n-1][i]);
+            mini = min(mini,prev[i]);
         }
         return mini;  
     }
